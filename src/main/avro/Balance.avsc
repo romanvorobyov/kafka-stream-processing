@@ -1,0 +1,19 @@
+{
+  "namespace": "io.confluent.developer.avro",
+  "type": "record",
+  "name": "Balance",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "diff",
+      "type": "long"
+    },
+    {
+      "name": "action",
+      "type": "string"
+    }
+  ]
+}

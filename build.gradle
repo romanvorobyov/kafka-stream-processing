@@ -1,0 +1,102 @@
+buildscript {
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id "com.github.davidmc24.gradle.plugin.avro" version "1.7.0"
+	id 'java'
+	id 'idea'
+}
+
+group = 'io.confluent.developer'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	Implementation {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url "https://packages.confluent.io/maven"
+	}
+}
+
+ext {
+	set('springCloudVersion', "2022.0.2")
+}
+
+dependencies {
+
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
+//	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+//	implementation 'org.ehcache:ehcache:3.9.5'
+//	implementation 'org.hibernate:hibernate-jcache:6.1.6.Final'
+//	implementation 'org.redisson:redisson-hibernate-6:3.21.1'
+
+	implementation "org.apache.avro:avro:1.11.1"
+	implementation 'org.apache.kafka:kafka-streams'
+	implementation 'org.springframework.kafka:spring-kafka'
+	implementation "io.confluent:kafka-streams-avro-serde:7.3.3"
+
+	implementation 'org.projectlombok:lombok'
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+
+	implementation 'org.postgresql:postgresql'
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'p6spy:p6spy:3.9.1'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+
+	testImplementation 'org.mockito:mockito-junit-jupiter:4.8.1'
+
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:postgresql'
+	testImplementation 'org.testcontainers:testcontainers'
+
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+}
+
+test {
+	useJUnitPlatform()
+	testLogging.showStandardStreams = true
+}
+
+bootRun{
+	setDefaultCharacterEncoding('UTF-8')
+}
+
+//protobuf {
+//	generatedFilesBaseDir = "$buildDir/generated-main-proto-java"
+//	protoc {
+//		artifact = 'com.google.protobuf:protoc:3.22.3'
+//	}
+//}
+dependencyManagement {
+	imports {
+		mavenBom "org.testcontainers:testcontainers-bom:1.18.0"
+	}
+}
