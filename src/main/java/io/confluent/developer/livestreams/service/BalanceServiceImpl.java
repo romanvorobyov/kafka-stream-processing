@@ -12,6 +12,7 @@ import io.confluent.developer.livestreams.repository.HistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,9 @@ class BalanceServiceImpl implements BalanceService {
 
     @Autowired
     private final MyCache cache;
+
+    @Value("${checkSyncOfCacheAndDb:false}")
+    private boolean checkSyncOfCacheAndDb;
 
     @Override
     @Transactional(readOnly = true)
@@ -71,7 +75,9 @@ class BalanceServiceImpl implements BalanceService {
             log.debug("[GET from DB ({}) = {}] at {}", id, valueDb[0], timeStr);
             return Optional.ofNullable((valueDb[0] != -1) ? valueDb[0] : null);
         } else {
-            lookInDbToCheckIfCacheDiffers(valueCacheOpt.get(), accountRepository, id); //TODO remove this call
+            if (checkSyncOfCacheAndDb){
+                lookInDbToCheckIfCacheDiffers(valueCacheOpt.get(), accountRepository, id); //TODO remove this call
+            }
             log.debug("[GET from Cache({}) = {}] at {}", id, valueCacheOpt.orElse(-1L), timeStr);
             return valueCacheOpt;
         }
